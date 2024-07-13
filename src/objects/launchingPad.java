@@ -10,17 +10,17 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class landingPad implements Renderable, Updateable {
+public class launchingPad implements Renderable, Updateable {
     private static double width  = 150;
     private static double height = 20;
     private double x , y;
     private int layer =2;
     public static BufferedImage landingpad;
 
-    public landingPad(double x, double y) throws IOException {
+    public launchingPad(double x, double y) throws IOException {
         this.x = x;
         this.y = y;
-        landingpad = ImageIO.read(new File("./res/landingpad.png"));
+        landingpad = ImageIO.read(new File("./res/launching.png"));
         Renderer.addRendedrableObject(this);
         Updater.addUpdateableObjects(this);
     }
@@ -61,7 +61,7 @@ public class landingPad implements Renderable, Updateable {
 
     @Override
     public String getID() {
-        return "landingpad";
+        return "launchingpad";
     }
 
     @Override

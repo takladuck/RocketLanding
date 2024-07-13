@@ -13,12 +13,12 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
-public class Spaceship implements Renderable, Updateable {
+public class Spaceship implements Renderable, Updateable{
     private static double width  = 55;
-    private static double height = 95;
+    private static double height = 85;
     private double x , y;
     private int layer =2;
-    private double vx,vy, maxSpeed =500;
+    private double vx,vy, maxSpeed =650;
     private  double acceleration =200, deceleration=400,gravity=175;
 
 
@@ -27,9 +27,9 @@ public class Spaceship implements Renderable, Updateable {
     private  static BufferedImage currentSpaceship,spaceshipWithThruster,spaceshipWithoutThruster;
 
 
-    public Spaceship(double x, double y) throws IOException {
-        this.x = x;
-        this.y = y;
+    public Spaceship(double X, double Y) throws IOException {
+        this.x = X;
+        this.y = Y;
         spaceshipWithoutThruster = ImageIO.read(new File("./res/rocket.png"));
         spaceshipWithThruster = ImageIO.read(new File("./res/rocketthruster.png"));
         currentSpaceship = spaceshipWithoutThruster;
@@ -118,6 +118,26 @@ public class Spaceship implements Renderable, Updateable {
             y = 720 - height+20;
             vy = 0;
         }
+        if(this.hasLanded()){
+            System.out.println("landed");
+            vy=0;
+            vx=0;
+        }
+        if(isColliding(this,"landingpad") != null){
+            if (!this.hasLanded()){
+                System.out.println("explode");
+            }
+            vy=0;
+            vx=0;
+
+        }
+        Updateable launchingPad = isColliding(this, "launchingpad");
+        if (launchingPad != null) {
+            if (vy > 0) {
+                y = launchingPad.getRenderable().getY() - height;
+                vy = -vy * 0.5;
+            }
+        }
 
     }
 
@@ -129,5 +149,13 @@ public class Spaceship implements Renderable, Updateable {
     @Override
     public Renderable getRenderable() {
         return this;
+    }
+    public boolean hasLanded(){
+        if (isColliding(this,"landingpad") != null){
+            return vx < (maxSpeed * 10 / 100) && vy < (maxSpeed * 10 / 100);
+        }
+        else {
+            return false;
+        }
     }
 }
